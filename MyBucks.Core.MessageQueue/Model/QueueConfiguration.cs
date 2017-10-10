@@ -11,5 +11,6 @@ namespace MyBucks.Core.MessageQueue.Model
         public string ExchangeType { get; set; }
         public string RoutingKey { get; set; }
         public bool Durable { get; internal set; }
+        
     }
 }
