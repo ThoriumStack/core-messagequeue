@@ -5,9 +5,9 @@ using System.Text;
 
 namespace MyBucks.Core.MessageQueue
 {
-    public class EventPublisher
+    public class EventQueuePublisher
     {
-        public IMessageQueueEventPublisher GetPublisher()
+        public IEventQueuePublisher GetPublisher()
         {
             return new RabbitEventPublisher(config => {
                 config.Exchange = "events";

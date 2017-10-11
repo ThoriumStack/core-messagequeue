@@ -16,6 +16,11 @@ namespace MyBucks.Core.MessageQueue.Publish
             _configuration = configuration;
         }
 
+        public PublisherBase()
+        {
+            _configuration = new QueueConfiguration();
+        }
+
         public void SetRoutingKey(string key)
         {
             _configuration.RoutingKey = key;
@@ -25,7 +30,7 @@ namespace MyBucks.Core.MessageQueue.Publish
         protected virtual void OnPublish(IModel channel) { }
         protected virtual void SetMessageProperties(IBasicProperties properties) { }
 
-        public void Publish<TPayload>(TPayload payload)
+        protected void Publish<TPayload>(TPayload payload)
         {
             lock (_publishLock)
             {

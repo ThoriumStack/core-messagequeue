@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyBucks.Core.MessageQueue", "MyBucks.Core.MessageQueue\MyBucks.Core.MessageQueue.csproj", "{69714DBB-53EF-440E-9FB0-0E10DF9E6FDE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyBucks.Core.MessageQueue", "MyBucks.Core.MessageQueue\MyBucks.Core.MessageQueue.csproj", "{69714DBB-53EF-440E-9FB0-0E10DF9E6FDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsumerTest", "ConsumerTest\ConsumerTest.csproj", "{427014C7-C9F1-4792-A257-9C2996A102F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerTest", "ConsumerTest\ConsumerTest.csproj", "{427014C7-C9F1-4792-A257-9C2996A102F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProducerTest", "ProducerTest\ProducerTest.csproj", "{207D5470-1B56-444D-A3AA-36B74B1073C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProducerTest", "ProducerTest\ProducerTest.csproj", "{207D5470-1B56-444D-A3AA-36B74B1073C1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestApplications", "TestApplications", "{5DA1FC13-B3CB-4FF8-AD17-E1137236E4D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,6 +32,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{427014C7-C9F1-4792-A257-9C2996A102F9} = {5DA1FC13-B3CB-4FF8-AD17-E1137236E4D1}
+		{207D5470-1B56-444D-A3AA-36B74B1073C1} = {5DA1FC13-B3CB-4FF8-AD17-E1137236E4D1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FF6072A1-ED91-4262-8A06-967DB3B273A8}

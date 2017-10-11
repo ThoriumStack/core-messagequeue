@@ -2,7 +2,7 @@
 
 namespace MyBucks.Core.MessageQueue
 {
-    public interface IMessageQueueEventPublisher
+    public interface IEventQueuePublisher
     {
         void PublishEvent<T>(string @event, T payload);
     }
