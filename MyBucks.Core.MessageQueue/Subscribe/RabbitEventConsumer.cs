@@ -1,4 +1,5 @@
-﻿using RabbitMQ.Client;
+﻿using MyBucks.Core.MessageQueue.Model;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
@@ -6,52 +7,27 @@ using System.Text;
 
 namespace MyBucks.Core.MessageQueue.Subscribe
 {
-    class RabbitEventConsumer : IMessageQueueEventConsumer
+    class RabbitEventConsumer : ConsumerBase, IMessageQueueEventConsumer
     {
-        IModel _channel;
-
-        public void Consume<TPayload>(string @event, Action<TPayload> action)
+        public RabbitEventConsumer()
         {
-            var connection = RabbitMqConnector.GetConnection();
-            _channel = connection.CreateModel();
-
-            _channel.ExchangeDeclare(exchange: "events", type: "topic");
-            var queueName = _channel.QueueDeclare().QueueName;
-
-
-            _channel.QueueBind(queue: queueName,
-                              exchange: "events",
-                              routingKey: $"{@event}");
-
-            var consumer = new EventingBasicConsumer(_channel);
-            consumer.Received += (model, ea) =>
-            {
-                var body = ea.Body;
-                var message = Encoding.UTF8.GetString(body);
-                var routingKey = ea.RoutingKey;
-                var returnObject = Jil.JSON.Deserialize<TPayload>(message);
-                action(returnObject);
-
-            };
-            consumer.Shutdown += Consumer_Shutdown;
-            _channel.BasicConsume(queue: queueName,
-
-                                 autoAck: true,
-                                 consumer: consumer);
+            _configuration.AutoAcknowledge = true;
+            _configuration.Exchange = "events";
+            _configuration.Durable = false;
+            _configuration.AutoDelete = true;
+            _configuration.ExchangeType = "topic";
         }
 
-        public void CloseChannel()
+        public void Consume<TPayload>(string @event, Action<TPayload> consumerMethod)
         {
-            _channel.Close();
+            _configuration.RoutingKey = @event;
+
+            base.Consume<TPayload>((payload) => {
+                consumerMethod(payload);
+                return new ConsumerResponse { ResponseStatus = ConsumerResponseStatus.Acknowledge };
+            });
         }
 
-        private void Consumer_Shutdown(object sender, ShutdownEventArgs e)
-        {
-            if (e.ReplyCode != 200)
-            {
-                throw new Exception($"Consumer shutdown: ({e.ReplyCode}){e.ReplyText}");
-            }
-        }
-
+        
     }
 }

@@ -10,7 +10,9 @@ namespace MyBucks.Core.MessageQueue.Model
         public string QueueName { get; set; }
         public string ExchangeType { get; set; }
         public string RoutingKey { get; set; }
-        public bool Durable { get; internal set; }
-        
+        public bool Durable { get; set; }
+        public bool AutoDelete { get; set; } = true;
+        public bool AutoAcknowledge { get; set; }
+        public bool EnableDeadLettering { get; set; }
     }
 }
