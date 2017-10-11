@@ -7,7 +7,7 @@ using System.Text;
 
 namespace MyBucks.Core.MessageQueue.Subscribe
 {
-    class RabbitEventConsumer : ConsumerBase, IMessageQueueEventConsumer
+    class RabbitEventConsumer : ConsumerBase, IEventQueueConsumer
     {
         public RabbitEventConsumer()
         {

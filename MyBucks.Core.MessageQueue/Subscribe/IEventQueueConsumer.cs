@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MyBucks.Core.MessageQueue.Subscribe
 {
-    public interface IMessageQueueEventConsumer
+    public interface IEventQueueConsumer
     {
         void Consume<TPayload>(string @event, Action<TPayload> consumerMethod);
         void CloseChannel();

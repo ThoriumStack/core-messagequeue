@@ -6,7 +6,7 @@ using RabbitMQ.Client;
 
 namespace MyBucks.Core.MessageQueue.Publish
 {
-    public class RabbitPersistentWorkQueuePublisher : PublisherBase, IWorkQueuePublisher
+    public class RabbitPersistentWorkQueuePublisher : RabbitMqPublisherBase, IWorkQueuePublisher
     {
         protected RabbitPersistentWorkQueuePublisher(QueueConfiguration configuration) : base(configuration)
         {

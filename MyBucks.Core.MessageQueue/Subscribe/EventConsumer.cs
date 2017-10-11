@@ -7,7 +7,7 @@ namespace MyBucks.Core.MessageQueue.Subscribe
 {
     public class EventConsumer
     {
-        private static ConcurrentDictionary<string, IMessageQueueEventConsumer> cd = new ConcurrentDictionary<string, IMessageQueueEventConsumer>();
+        private static ConcurrentDictionary<string, IEventQueueConsumer> cd = new ConcurrentDictionary<string, IEventQueueConsumer>();
 
         private static Object lockVar = new object();
 

@@ -6,17 +6,17 @@ using System.Text;
 
 namespace MyBucks.Core.MessageQueue.Publish
 {
-    public abstract class PublisherBase
+    public abstract class RabbitMqPublisherBase
     {
         private Object _publishLock = new Object();
         protected QueueConfiguration _configuration;
 
-        public PublisherBase(QueueConfiguration configuration)
+        public RabbitMqPublisherBase(QueueConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public PublisherBase()
+        public RabbitMqPublisherBase()
         {
             _configuration = new QueueConfiguration();
         }
