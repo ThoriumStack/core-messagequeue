@@ -10,7 +10,7 @@ namespace ConsumerTest
             Console.WriteLine("=== Consumer ===");
             EventConsumer.Consume<TestEvent>("USER_CREATED", WriteConsumer);
             EventConsumer.Consume<TestEvent>("USER_CREATED", WriteConsumer2);
-
+            
             Console.ReadKey();
         }
 

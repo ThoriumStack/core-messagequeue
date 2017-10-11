@@ -21,13 +21,11 @@ namespace MyBucks.Core.MessageQueue.Subscribe
         public void Consume<TPayload>(string @event, Action<TPayload> consumerMethod)
         {
             _configuration.RoutingKey = @event;
-
+            Console.WriteLine(_configuration);
             base.Consume<TPayload>((payload) => {
                 consumerMethod(payload);
                 return new ConsumerResponse { ResponseStatus = ConsumerResponseStatus.Acknowledge };
             });
         }
-
-        
     }
 }

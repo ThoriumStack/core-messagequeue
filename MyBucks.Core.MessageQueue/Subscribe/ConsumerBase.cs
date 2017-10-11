@@ -11,6 +11,12 @@ namespace MyBucks.Core.MessageQueue.Subscribe
     {
         IModel _channel;
 
+        internal ConsumerBase()
+        {
+            _configuration = new QueueConfiguration();
+            
+        }
+
         protected QueueConfiguration _configuration;
 
         public void Consume<TPayload>(Func<TPayload, ConsumerResponse> action)

@@ -43,7 +43,7 @@ namespace MyBucks.Core.MessageQueue.Publish
                     
                     channel.ExchangeDeclare(exchange: _configuration.Exchange,
                                             type: _configuration.ExchangeType, 
-                                            durable: _configuration.Durable);
+                                            durable: _configuration.Durable, autoDelete: _configuration.AutoDelete);
 
                     OnChannelCreate(channel);
                     var message = Jil.JSON.Serialize(payload);

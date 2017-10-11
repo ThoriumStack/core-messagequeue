@@ -14,12 +14,15 @@ namespace MyBucks.Core.MessageQueue
         {
             _configuration = new QueueConfiguration();
             _configuration.Durable = false;
+            _configuration.AutoDelete = true;
+            _configuration.AutoAcknowledge = true;
             config(_configuration);
         }
 
         public void PublishEvent<T>(string @event, T payload)
         {
             SetRoutingKey(@event);
+            Console.WriteLine(_configuration);
             base.Publish(payload);
         }
     }

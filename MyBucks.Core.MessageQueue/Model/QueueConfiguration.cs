@@ -14,5 +14,10 @@ namespace MyBucks.Core.MessageQueue.Model
         public bool AutoDelete { get; set; } = true;
         public bool AutoAcknowledge { get; set; }
         public bool EnableDeadLettering { get; set; }
+
+        public override string ToString()
+        {
+            return $"Exchange: {Exchange}, Queue: {QueueName}, Durable: {Durable}, AutoDelete: {AutoDelete}, AutoAck: {AutoAcknowledge}";
+        }
     }
 }
