@@ -7,9 +7,9 @@ using System.Text;
 
 namespace MyBucks.Core.MessageQueue.Subscribe
 {
-    class RabbitEventConsumer : ConsumerBase, IEventQueueConsumer
+    class RabbitMqEventConsumer : ConsumerBase, IEventQueueConsumer
     {
-        public RabbitEventConsumer()
+        public RabbitMqEventConsumer()
         {
             _configuration.AutoAcknowledge = true;
             _configuration.Exchange = "events";

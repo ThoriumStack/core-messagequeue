@@ -9,7 +9,7 @@ namespace MyBucks.Core.MessageQueue
     {
         public IEventQueuePublisher GetPublisher()
         {
-            return new RabbitEventPublisher(config => {
+            return new RabbitMqEventPublisher(config => {
                 config.Exchange = "events";
                 config.ExchangeType = "topic";
             });

@@ -8,7 +8,7 @@ namespace MyBucks.Core.MessageQueue.Publish
     {
         public IWorkQueuePublisher GetPersistentQueuePublisher()
         {
-            return new RabbitPersistentWorkQueuePublisher();
+            return new RabbitMqPersistentWorkQueuePublisher();
         }
     }
 }

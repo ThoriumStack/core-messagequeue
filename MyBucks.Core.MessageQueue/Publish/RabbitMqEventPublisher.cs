@@ -7,10 +7,10 @@ using System.Text;
 
 namespace MyBucks.Core.MessageQueue
 {
-    public class RabbitEventPublisher : RabbitMqPublisherBase, IEventQueuePublisher
+    public class RabbitMqEventPublisher : RabbitMqPublisherBase, IEventQueuePublisher
     {
 
-        public RabbitEventPublisher(Action<QueueConfiguration> config) : base(null)
+        public RabbitMqEventPublisher(Action<QueueConfiguration> config) : base(null)
         {
             _configuration = new QueueConfiguration();
             _configuration.Durable = false;

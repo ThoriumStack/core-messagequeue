@@ -6,15 +6,15 @@ using RabbitMQ.Client;
 
 namespace MyBucks.Core.MessageQueue.Publish
 {
-    public class RabbitPersistentWorkQueuePublisher : RabbitMqPublisherBase, IWorkQueuePublisher
+    public class RabbitMqPersistentWorkQueuePublisher : RabbitMqPublisherBase, IWorkQueuePublisher
     {
-        protected RabbitPersistentWorkQueuePublisher(QueueConfiguration configuration) : base(configuration)
+        protected RabbitMqPersistentWorkQueuePublisher(QueueConfiguration configuration) : base(configuration)
         {
             configuration.Durable = true;
             configuration.ExchangeType = "direct";
         }
 
-        public RabbitPersistentWorkQueuePublisher() : base()
+        public RabbitMqPersistentWorkQueuePublisher() : base()
         {
             _configuration.Durable = true;
             _configuration.ExchangeType = "direct";
