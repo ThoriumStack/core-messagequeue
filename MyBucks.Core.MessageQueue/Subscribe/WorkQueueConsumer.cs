@@ -3,31 +3,42 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace MyBucks.Core.MessageQueue.Subscribe
 {
     public class WorkQueueConsumer
     {
-        private static ConcurrentDictionary<string, List<IWorkQueueConsumer>> cd = new ConcurrentDictionary<string, List<IWorkQueueConsumer>>();
+        private static List<IWorkQueueConsumer> cd = new List<IWorkQueueConsumer>();
 
         private static Object lockVar = new object();
+        private static Object stopLock = new object();
 
-        public static void Consume<TPayload>(string exchange, string queue, Func<WorkQueueMessage<TPayload>, ConsumerResponse> consumerMethod) 
+        public static Guid Consume<TPayload>(string exchange, string queue, Func<WorkQueueMessage<TPayload>, ConsumerResponse> consumerMethod) 
         {
             lock (lockVar)
             {
                 var consumerInstance = new RabbitMqWorkQueueConsumer();
 
-                var key = $"{exchange}.{queue}";
-
-                if (!cd.ContainsKey(key) || cd[key] == null)
-                {
-                    cd[key] = new List<IWorkQueueConsumer>();
-                    
-                }
-                cd[key].Add(consumerInstance);
+              
+                cd.Add(consumerInstance);
 
                 consumerInstance.Consume(exchange, queue, consumerMethod);
+                return consumerInstance.ConsumerId;
+            }
+            
+        }
+
+        public static void StopConsumer(Guid consumerReference)
+        {
+            lock (stopLock)
+            {
+                var consumer = cd.FirstOrDefault(c => c.ConsumerId == consumerReference);
+                consumer?.CloseChannel();
+                if (consumer != null)
+                {
+                    cd.Remove(consumer);
+                }
             }
         }
     }

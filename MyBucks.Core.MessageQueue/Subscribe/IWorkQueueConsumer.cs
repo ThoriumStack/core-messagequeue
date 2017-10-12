@@ -7,6 +7,8 @@ namespace MyBucks.Core.MessageQueue.Subscribe
 {
     public interface IWorkQueueConsumer
     {
+        Guid ConsumerId { get; set; }
+        void CloseChannel();
         void Consume<TPayload>(string exchange, string queue, Func<TPayload, ConsumerResponse> consumerMethod);
     }
 }

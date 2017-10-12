@@ -7,6 +7,8 @@ namespace MyBucks.Core.MessageQueue.Subscribe
 {
     public class RabbitMqWorkQueueConsumer : RabbitMqConsumerBase, IWorkQueueConsumer
     {
+        public Guid ConsumerId { get; set; } = Guid.NewGuid();
+
         public RabbitMqWorkQueueConsumer() : base()
         {
             _configuration.Durable = true;

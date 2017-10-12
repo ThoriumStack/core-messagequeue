@@ -12,6 +12,8 @@ namespace ConsumerTest
             EventConsumer.Consume<TestEvent>("USER_CREATED", WriteConsumer);
             EventConsumer.Consume<TestEvent>("USER_CREATED", WriteConsumer2);
             WorkQueueConsumer.Consume<ReceiptMessage>("receipts", "intecon", InteconProcessor);
+
+            
             Console.ReadKey();
         }
 
@@ -19,6 +21,7 @@ namespace ConsumerTest
         private static ConsumerResponse InteconProcessor(WorkQueueMessage<ReceiptMessage> arg)
         {
             Console.WriteLine($"Wrote out receipt for {arg.Payload.Amount} to customer {arg.Payload.CustomerId}");
+            // process message here
             return ConsumerResponse.DiscardWithError();
         }
 
