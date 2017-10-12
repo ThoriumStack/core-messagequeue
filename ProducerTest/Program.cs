@@ -1,4 +1,5 @@
 ﻿using MyBucks.Core.MessageQueue;
+using MyBucks.Core.MessageQueue.Model;
 using MyBucks.Core.MessageQueue.Publish;
 using System;
 
@@ -29,13 +30,19 @@ namespace ProducerTest
                 Console.Write("Order: ");
                 var orderText = Console.ReadLine();
                 var workproducer = new WorkQueuePublisher().GetPersistentQueuePublisher();
-                workproducer.PublishMessage("orders", "pizza", new MyBucks.Core.MessageQueue.Model.WorkQueueMessage<Order> { Payload = new Order { Item = orderText } });
+                workproducer.PublishMessage("receipts", "intecon", new MyBucks.Core.MessageQueue.Model.WorkQueueMessage<ReceiptMessage> { Payload = new ReceiptMessage { Amount = decimal.Parse(orderText), CustomerId = "JKL-HYDE" } });
             }
         }
     }
 
     public class Order {
         public string Item { get; set; }
+    }
+
+    public class ReceiptMessage 
+    {
+        public decimal Amount { get; set; }
+        public string CustomerId { get; set; }
     }
 
 

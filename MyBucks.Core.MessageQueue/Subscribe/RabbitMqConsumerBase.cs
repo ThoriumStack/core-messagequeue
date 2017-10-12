@@ -7,19 +7,16 @@ using System.Text;
 
 namespace MyBucks.Core.MessageQueue.Subscribe
 {
-    public class ConsumerBase
+    public class RabbitMqConsumerBase : RabbitMqBase
     {
         IModel _channel;
 
-        internal ConsumerBase()
+        internal RabbitMqConsumerBase()
         {
             _configuration = new QueueConfiguration();
-            
         }
 
-        protected QueueConfiguration _configuration;
-
-        public void Consume<TPayload>(Func<TPayload, ConsumerResponse> action)
+        protected void Consume<TPayload>(Func<TPayload, ConsumerResponse> action)
         {
             var connection = RabbitMqConnector.GetConnection();
             _channel = connection.CreateModel();
@@ -29,17 +26,7 @@ namespace MyBucks.Core.MessageQueue.Subscribe
             var queueName = "";
 
             Dictionary<string, object> queueArguments = new Dictionary<string, object>();
-
-            if (_configuration.EnableDeadLettering)
-            {
-                if (string.IsNullOrWhiteSpace(_configuration.QueueName))
-                {
-                    throw new ArgumentException("Cannot enable deadletter queues on anonymous queues.", nameof(_configuration.QueueName));
-                }
-                queueArguments["x-dead-letter-exchange"] = $"{_configuration.Exchange}.deadletter";
-                queueArguments["x-dead-letter-routing-key"] =  _configuration.QueueName;
-                SetupDeadLetterQueue();
-            }
+            ConfigureDeadLetterQueue(queueArguments, _channel);
 
             if (string.IsNullOrWhiteSpace(_configuration.QueueName))
             {
@@ -57,22 +44,7 @@ namespace MyBucks.Core.MessageQueue.Subscribe
             var consumer = new EventingBasicConsumer(_channel);
             consumer.Received += (model, ea) =>
             {
-                var body = ea.Body;
-                var message = Encoding.UTF8.GetString(body);
-                var routingKey = ea.RoutingKey;
-                var returnObject = Jil.JSON.Deserialize<TPayload>(message);
-                var response = action(returnObject);
-                if (!_configuration.AutoAcknowledge)
-                {
-                    var responseActions = new Dictionary<ConsumerResponseStatus, Action>
-                    {
-                        [ConsumerResponseStatus.Acknowledge] = () => _channel.BasicAck(ea.DeliveryTag, false),
-                        [ConsumerResponseStatus.Requeue] = () => _channel.BasicNack(ea.DeliveryTag, false, true),
-                        [ConsumerResponseStatus.Reject] = () => _channel.BasicNack(ea.DeliveryTag, false, true),
-                        [ConsumerResponseStatus.DiscardWithError] = () => _channel.BasicReject(ea.DeliveryTag, false)
-                    };
-                }
-
+                OnReceived(action, ea);
             };
             consumer.Shutdown += Consumer_Shutdown;
             _channel.BasicConsume(queue: queueName,
@@ -81,17 +53,27 @@ namespace MyBucks.Core.MessageQueue.Subscribe
                                  consumer: consumer);
         }
 
-        private void SetupDeadLetterQueue()
+        private void OnReceived<TPayload>(Func<TPayload, ConsumerResponse> action, BasicDeliverEventArgs ea)
         {
-            _channel.ExchangeDeclare($"{_configuration.Exchange}.deadletter", ExchangeType.Direct);
-            _channel.QueueDeclare($"{_configuration.QueueName}.deadletters", true, false, false);
-            _channel.QueueBind(
-                queue: $"{_configuration.QueueName}.deadletter",
-                exchange: $"{_configuration.Exchange}.deadletter",
-                routingKey: _configuration.QueueName
-                );
-
+            var body = ea.Body;
+            var message = Encoding.UTF8.GetString(body);
+            var routingKey = ea.RoutingKey;
+            var returnObject = Jil.JSON.Deserialize<TPayload>(message);
+            var response = action(returnObject);
+            if (!_configuration.AutoAcknowledge)
+            {
+                var responseActions = new Dictionary<ConsumerResponseStatus, Action>
+                {
+                    [ConsumerResponseStatus.Acknowledge] = () => _channel.BasicAck(ea.DeliveryTag, false),
+                    [ConsumerResponseStatus.Requeue] = () => _channel.BasicNack(ea.DeliveryTag, false, true),
+                    [ConsumerResponseStatus.Reject] = () => _channel.BasicNack(ea.DeliveryTag, false, true),
+                    [ConsumerResponseStatus.DiscardWithError] = () => _channel.BasicReject(ea.DeliveryTag, false)
+                };
+                responseActions[response.ResponseStatus]();
+            }
         }
+
+
 
         public void CloseChannel()
         {

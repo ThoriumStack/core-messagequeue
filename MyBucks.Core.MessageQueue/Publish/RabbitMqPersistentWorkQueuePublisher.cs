@@ -12,15 +12,19 @@ namespace MyBucks.Core.MessageQueue.Publish
         {
             configuration.Durable = true;
             configuration.ExchangeType = "direct";
+            _configuration.AutoAcknowledge = false;
+            _configuration.EnableDeadLettering = true;
         }
 
         public RabbitMqPersistentWorkQueuePublisher() : base()
         {
             _configuration.Durable = true;
             _configuration.ExchangeType = "direct";
+            _configuration.AutoAcknowledge = false;
+            _configuration.EnableDeadLettering = true;
         }
 
-        public void PublishMessage<T>(string exchange, string queue, WorkQueueMessage<T> payload)  
+        public void PublishMessage<T>(string exchange, string queue, WorkQueueMessage<T> payload)
         {
             _configuration.Exchange = exchange;
             _configuration.QueueName = queue;
@@ -30,7 +34,14 @@ namespace MyBucks.Core.MessageQueue.Publish
 
         protected override void OnChannelCreate(IModel channel)
         {
-            channel.QueueDeclare(_configuration.QueueName, _configuration.Durable, false);
+
+
+            var queueParms = new Dictionary<string, object>();
+
+            ConfigureDeadLetterQueue(queueParms, channel);
+
+            channel.QueueDeclare(_configuration.QueueName, _configuration.Durable, exclusive: false, autoDelete: _configuration.AutoDelete, arguments: queueParms);
+
             channel.QueueBind(_configuration.QueueName, _configuration.Exchange, _configuration.RoutingKey);
             channel.ConfirmSelect();
         }

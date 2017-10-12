@@ -6,10 +6,10 @@ using System.Text;
 
 namespace MyBucks.Core.MessageQueue.Publish
 {
-    public abstract class RabbitMqPublisherBase
+    public abstract class RabbitMqPublisherBase : RabbitMqBase
     {
         private Object _publishLock = new Object();
-        protected QueueConfiguration _configuration;
+        
 
         public RabbitMqPublisherBase(QueueConfiguration configuration)
         {
@@ -44,7 +44,7 @@ namespace MyBucks.Core.MessageQueue.Publish
                     channel.ExchangeDeclare(exchange: _configuration.Exchange,
                                             type: _configuration.ExchangeType, 
                                             durable: _configuration.Durable, autoDelete: _configuration.AutoDelete);
-
+                    
                     OnChannelCreate(channel);
                     var message = Jil.JSON.Serialize(payload);
                     var body = Encoding.UTF8.GetBytes(message);
