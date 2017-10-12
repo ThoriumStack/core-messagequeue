@@ -9,8 +9,8 @@ namespace ConsumerTest
         static void Main(string[] args)
         {
             Console.WriteLine("=== Consumer ===");
-            EventConsumer.Consume<TestEvent>("USER_CREATED", WriteConsumer);
-            EventConsumer.Consume<TestEvent>("USER_CREATED", WriteConsumer2);
+            EventConsumer.Subscribe<TestEvent>("USER_CREATED", WriteConsumer);
+            EventConsumer.Subscribe<TestEvent>("USER_CREATED", WriteConsumer2);
             WorkQueueConsumer.Consume<ReceiptMessage>("receipts", "intecon", InteconProcessor);
 
             

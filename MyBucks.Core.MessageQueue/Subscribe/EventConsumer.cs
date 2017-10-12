@@ -11,7 +11,7 @@ namespace MyBucks.Core.MessageQueue.Subscribe
 
         private static Object lockVar = new object();
 
-        public static void Consume<TPayload>(string @event, Action<TPayload> consumer)
+        public static void Subscribe<TPayload>(string @event, Action<TPayload> consumer)
         {
             lock (lockVar)
             {
@@ -33,6 +33,14 @@ namespace MyBucks.Core.MessageQueue.Subscribe
                     consumerInstance.Consume(@event, consumer);
                 }
 
+            }
+        }
+
+        public static void Unsubscribe(string @event)
+        {
+            if (cd.ContainsKey(@event))
+            {
+                cd.TryRemove(@event, out IEventQueueConsumer _);
             }
         }
     }
