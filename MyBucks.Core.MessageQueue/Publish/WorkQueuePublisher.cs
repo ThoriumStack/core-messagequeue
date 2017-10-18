@@ -16,7 +16,7 @@ namespace MyBucks.Core.MessageQueue.Publish
         public IWorkQueuePublisher GetAtlasQueuePublisher(string hostName, string username, string password)
         {
             RabbitMqConnector.SetConnectionSettings(hostName, username, password);
-            return new RabbitMqPersistentWorkQueuePublisher();
+            return new AtlasQueuePublisher();
         }
     }
 }
