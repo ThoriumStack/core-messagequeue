@@ -22,7 +22,7 @@ namespace ConsumerTest
         {
             Console.WriteLine($"Wrote out receipt for {arg.Payload.Amount} to customer {arg.Payload.CustomerId}");
             // process message here
-            return ConsumerResponse.DiscardWithError();
+            return ConsumerResponse.Acknowledge();
         }
 
         private static void WriteConsumer2(TestEvent obj)

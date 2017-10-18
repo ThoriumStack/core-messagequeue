@@ -10,5 +10,10 @@ namespace MyBucks.Core.MessageQueue.Publish
         {
             return new RabbitMqPersistentWorkQueuePublisher();
         }
+
+        public IWorkQueuePublisher GetAtlasQueuePublisher()
+        {
+            return new RabbitMqPersistentWorkQueuePublisher();
+        }
     }
 }

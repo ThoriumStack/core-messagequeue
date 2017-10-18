@@ -7,6 +7,6 @@ namespace MyBucks.Core.MessageQueue.Publish
 {
     public interface IWorkQueuePublisher
     {
-        void PublishMessage<T>(string exchange, string queue, WorkQueueMessage<T> payload);
+        void PublishMessage<T>(string exchange, string queue, T payload);
     }
 }

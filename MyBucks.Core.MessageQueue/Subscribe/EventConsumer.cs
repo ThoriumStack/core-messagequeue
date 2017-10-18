@@ -16,8 +16,6 @@ namespace MyBucks.Core.MessageQueue.Subscribe
             lock (lockVar)
             {
                 var consumerInstance = new RabbitMqEventConsumer();
-                
-
                 if (!cd.ContainsKey(@event))
                 {
                     if (cd.TryAdd(@event, consumerInstance))

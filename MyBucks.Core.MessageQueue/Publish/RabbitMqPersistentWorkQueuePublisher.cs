@@ -24,7 +24,7 @@ namespace MyBucks.Core.MessageQueue.Publish
             _configuration.EnableDeadLettering = true;
         }
 
-        public void PublishMessage<T>(string exchange, string queue, WorkQueueMessage<T> payload)
+        public void PublishMessage<T>(string exchange, string queue, T payload)
         {
             _configuration.Exchange = exchange;
             _configuration.QueueName = queue;

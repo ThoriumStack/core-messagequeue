@@ -46,7 +46,7 @@ namespace MyBucks.Core.MessageQueue.Publish
                                             durable: _configuration.Durable, autoDelete: _configuration.AutoDelete);
                     
                     OnChannelCreate(channel);
-                    var message = Jil.JSON.Serialize(payload);
+                    var message = Jil.JSON.Serialize(payload, Jil.Options.IncludeInherited);
                     var body = Encoding.UTF8.GetBytes(message);
 
                     var messageProperties = channel.CreateBasicProperties();

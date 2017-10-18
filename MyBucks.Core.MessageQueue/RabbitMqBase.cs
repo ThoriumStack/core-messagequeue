@@ -10,7 +10,7 @@ namespace MyBucks.Core.MessageQueue
     {
         protected QueueConfiguration _configuration;
 
-        protected void ConfigureDeadLetterQueue(Dictionary<string, object> queueArguments, IModel channel)
+        protected virtual void ConfigureDeadLetterQueue(Dictionary<string, object> queueArguments, IModel channel)
         {
             if (_configuration.EnableDeadLettering)
             {
