@@ -24,6 +24,8 @@ namespace MyBucks.Core.MessageQueue
             }
         }
 
+        
+
         private void SetupDeadLetterQueue(IModel channel)
         {
             channel.ExchangeDeclare($"{_configuration.Exchange}.deadletter", ExchangeType.Direct);

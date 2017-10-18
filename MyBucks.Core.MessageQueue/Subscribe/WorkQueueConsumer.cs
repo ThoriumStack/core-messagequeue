@@ -14,7 +14,20 @@ namespace MyBucks.Core.MessageQueue.Subscribe
         private static Object lockVar = new object();
         private static Object stopLock = new object();
 
-        public static Guid Consume<TPayload>(string exchange, string queue, Func<WorkQueueMessage<TPayload>, ConsumerResponse> consumerMethod) 
+        private static Lazy<WorkQueueConsumer> _instance = new Lazy<WorkQueueConsumer>(CreateConsumer);
+
+        private static WorkQueueConsumer CreateConsumer()
+        {
+            return new WorkQueueConsumer();
+        }
+
+        public static WorkQueueConsumer GetConsumer(string hostname, string username, string password)
+        {
+            RabbitMqConnector.SetConnectionSettings(hostname, username, password);
+            return _instance.Value;
+        }
+
+        public Guid Consume<TPayload>(string exchange, string queue, Func<WorkQueueMessage<TPayload>, ConsumerResponse> consumerMethod) 
         {
             lock (lockVar)
             {

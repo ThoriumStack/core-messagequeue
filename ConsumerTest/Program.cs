@@ -9,9 +9,10 @@ namespace ConsumerTest
         static void Main(string[] args)
         {
             Console.WriteLine("=== Consumer ===");
-            EventConsumer.Subscribe<TestEvent>("USER_CREATED", WriteConsumer);
-            EventConsumer.Subscribe<TestEvent>("USER_CREATED", WriteConsumer2);
-            WorkQueueConsumer.Consume<ReceiptMessage>("receipts", "intecon", InteconProcessor);
+            var consumer = EventConsumer.GetConsumer("localhost", "guest", "guest");
+            consumer.Subscribe<TestEvent>("USER_CREATED", WriteConsumer);
+            consumer.Subscribe<TestEvent>("USER_CREATED", WriteConsumer2);
+            WorkQueueConsumer.GetConsumer("localhost", "guest", "guest").Consume<ReceiptMessage>("receipts", "intecon", InteconProcessor);
 
             
             Console.ReadKey();

@@ -11,7 +11,20 @@ namespace MyBucks.Core.MessageQueue.Subscribe
 
         private static Object lockVar = new object();
 
-        public static void Subscribe<TPayload>(string @event, Action<TPayload> consumer)
+        private static Lazy<EventConsumer> _instance = new Lazy<EventConsumer>(CreateConsumer);
+
+        private static EventConsumer CreateConsumer()
+        {
+            return new EventConsumer();
+        }
+
+        public static EventConsumer GetConsumer(string hostname, string username, string password)
+        {
+            RabbitMqConnector.SetConnectionSettings(hostname, username, password);
+            return _instance.Value;
+        }
+
+        public void Subscribe<TPayload>(string @event, Action<TPayload> consumer)
         {
             lock (lockVar)
             {
@@ -34,7 +47,7 @@ namespace MyBucks.Core.MessageQueue.Subscribe
             }
         }
 
-        public static void Unsubscribe(string @event)
+        public void Unsubscribe(string @event)
         {
             if (cd.ContainsKey(@event))
             {

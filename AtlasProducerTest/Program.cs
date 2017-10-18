@@ -12,7 +12,7 @@ namespace AtlasProducerTest
             string environment = ""; // todo: read from settings
 
 
-            var qp = new WorkQueuePublisher().GetAtlasQueuePublisher();
+            var qp = new WorkQueuePublisher().GetAtlasQueuePublisher("localhost", "admin", "admin");
             var routingKey = $"{environment}54.ProcessMessage";
             qp.SetRoutingKey(routingKey);
 

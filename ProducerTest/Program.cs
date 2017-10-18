@@ -18,7 +18,7 @@ namespace ProducerTest
                 var name = Console.ReadLine();
                 Console.Write("Surname: ");
                 var surname = Console.ReadLine();
-                producer.GetPublisher().PublishEvent("USER_CREATED", new TestEvent { Name = name, Surname = surname });
+                producer.GetPublisher("localhost", "admin", "admin").PublishEvent("USER_CREATED", new TestEvent { Name = name, Surname = surname });
                 var key = Console.ReadKey();
                 if (key.Key == ConsoleKey.Escape)
                 {
@@ -29,7 +29,7 @@ namespace ProducerTest
             {
                 Console.Write("Order: ");
                 var orderText = Console.ReadLine();
-                var workproducer = new WorkQueuePublisher().GetPersistentQueuePublisher();
+                var workproducer = new WorkQueuePublisher().GetPersistentQueuePublisher("localhost", "admin", "admin");
                 workproducer.PublishMessage("receipts", "intecon", new MyBucks.Core.MessageQueue.Model.WorkQueueMessage<ReceiptMessage> { Payload = new ReceiptMessage { Amount = decimal.Parse(orderText), CustomerId = "JKL-HYDE" } });
             }
         }
