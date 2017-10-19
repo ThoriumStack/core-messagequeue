@@ -14,6 +14,9 @@ namespace MyBucks.Core.MessageQueue.Model
         public bool AutoDelete { get; set; } = true;
         public bool AutoAcknowledge { get; set; }
         public bool EnableDeadLettering { get; set; }
+        public string DeadLetterExchange { get; set; }
+        public string DeadLetterRoutingKey { get; set; }
+        public string DeadLetterQueue { get; internal set; }
 
         public override string ToString()
         {

@@ -10,6 +10,10 @@ namespace MyBucks.Core.MessageQueue
     {
         protected QueueConfiguration _configuration;
 
+        private string DeadLetterExchange => _configuration.DeadLetterExchange ?? $"{ _configuration.Exchange}.deadletter";
+        private string DeadLetterRoutingKey => _configuration.DeadLetterRoutingKey ?? _configuration.QueueName;
+        private string DeadLetterQueue => _configuration.DeadLetterQueue ?? $"{_configuration.QueueName}.deadletter";
+
         protected virtual void ConfigureDeadLetterQueue(Dictionary<string, object> queueArguments, IModel channel)
         {
             if (_configuration.EnableDeadLettering)
@@ -18,8 +22,8 @@ namespace MyBucks.Core.MessageQueue
                 {
                     throw new ArgumentException("Cannot enable deadletter queues on anonymous queues.", nameof(_configuration.QueueName));
                 }
-                queueArguments["x-dead-letter-exchange"] = $"{_configuration.Exchange}.deadletter";
-                queueArguments["x-dead-letter-routing-key"] = _configuration.QueueName;
+                queueArguments["x-dead-letter-exchange"] = DeadLetterExchange;
+                queueArguments["x-dead-letter-routing-key"] = DeadLetterRoutingKey;
                 SetupDeadLetterQueue(channel);
             }
         }
@@ -28,12 +32,12 @@ namespace MyBucks.Core.MessageQueue
 
         private void SetupDeadLetterQueue(IModel channel)
         {
-            channel.ExchangeDeclare($"{_configuration.Exchange}.deadletter", ExchangeType.Direct);
-            channel.QueueDeclare($"{_configuration.QueueName}.deadletter", true, false, false);
+            channel.ExchangeDeclare(DeadLetterExchange, ExchangeType.Direct);
+            channel.QueueDeclare(DeadLetterQueue, true, false, false);
             channel.QueueBind(
-                queue: $"{_configuration.QueueName}.deadletter",
-                exchange: $"{_configuration.Exchange}.deadletter",
-                routingKey: _configuration.QueueName
+                queue: DeadLetterQueue,
+                exchange: DeadLetterExchange,
+                routingKey: DeadLetterRoutingKey
                 );
         }
     }

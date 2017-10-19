@@ -9,6 +9,8 @@ namespace MyBucks.Core.MessageQueue
 {
     public class AtlasQueuePublisher : RabbitMqPublisherBase, IWorkQueuePublisher
     {
+        public string Environment { get; set; }
+
         protected AtlasQueuePublisher(QueueConfiguration configuration) : base(configuration)
         {
             InitSettings();
@@ -69,7 +71,7 @@ namespace MyBucks.Core.MessageQueue
                 {
                     throw new ArgumentException("Cannot enable deadletter queues on anonymous queues.", nameof(_configuration.QueueName));
                 }
-                queueArguments["x-dead-letter-exchange"] = $"{_configuration.Exchange}DeadLetter";
+                queueArguments["x-dead-letter-exchange"] = $"{Environment}.FinCloudDeadLetter";
                 queueArguments["x-dead-letter-routing-key"] = $"{_configuration.QueueName}.DeadLetter.rk";
                 
             }

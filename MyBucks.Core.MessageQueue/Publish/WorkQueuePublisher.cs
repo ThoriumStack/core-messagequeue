@@ -13,10 +13,10 @@ namespace MyBucks.Core.MessageQueue.Publish
             return new RabbitMqPersistentWorkQueuePublisher();
         }
 
-        public IWorkQueuePublisher GetAtlasQueuePublisher(string hostName, string username, string password)
+        public IWorkQueuePublisher GetAtlasQueuePublisher(string environment, string hostName, string username, string password)
         {
             RabbitMqConnector.SetConnectionSettings(hostName, username, password);
-            return new AtlasQueuePublisher();
+            return new AtlasQueuePublisher() { Environment = environment };
         }
     }
 }
