@@ -16,7 +16,7 @@ namespace MyBucks.Core.MessageQueue.Subscribe
             _configuration = new QueueConfiguration();
         }
 
-        protected void Consume<TPayload>(Func<TPayload, ConsumerResponse> action)
+        private string QueueSetup()
         {
             var connection = RabbitMqConnector.GetConnection();
             _channel = connection.CreateModel();
@@ -40,6 +40,12 @@ namespace MyBucks.Core.MessageQueue.Subscribe
             _channel.QueueBind(queue: queueName,
                               exchange: _configuration.Exchange,
                               routingKey: _configuration.RoutingKey);
+            return queueName;
+        }
+
+        protected void Consume<TPayload>(Func<TPayload, ConsumerResponse> action)
+        {
+            var queueName = QueueSetup();
 
             var consumer = new EventingBasicConsumer(_channel);
             consumer.Received += (model, ea) =>
@@ -51,6 +57,23 @@ namespace MyBucks.Core.MessageQueue.Subscribe
 
                                  autoAck: _configuration.AutoAcknowledge,
                                  consumer: consumer);
+        }
+
+        public virtual SimpleQueueMessage<TPayload> GetNextMessage<TPayload>(bool acknowledge)
+        {
+            var queueName = QueueSetup();
+            BasicGetResult ea = _channel.BasicGet(queueName, !acknowledge);
+            var body = ea.Body;
+            var message = Encoding.UTF8.GetString(body);
+            var routingKey = ea.RoutingKey;
+            var returnObject = Jil.JSON.Deserialize<TPayload>(message);
+            return new SimpleQueueMessage<TPayload> { DeliveryTag = ea.DeliveryTag, Payload = returnObject };
+            
+        }
+
+        public virtual void Acknowledge<TPayload>(SimpleQueueMessage<TPayload> message)
+        {
+            _channel.BasicAck(message.DeliveryTag, false);
         }
 
         private void OnReceived<TPayload>(Func<TPayload, ConsumerResponse> action, BasicDeliverEventArgs ea)

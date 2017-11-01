@@ -32,6 +32,7 @@ namespace AtlasProducerTest
 
             };
 
+
             //qp.PublishMessage($"{environment}.FincloudGeneric", $"{environment}.WhatsappZa", payload);
             qp.PublishMessage($"{environment}FincloudGeneric", $"{environment}WhatsappZa", payload);
             Console.Read();

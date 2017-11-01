@@ -15,13 +15,26 @@ namespace MyBucks.Core.MessageQueue.Subscribe
             _configuration.ExchangeType = "direct";
         }
 
-        public void Consume<TPayload>(string exchange, string queue, Func<TPayload, ConsumerResponse> consumerMethod)
+        public void SetConsumerConfig(string exchange, string queue)
         {
             _configuration.Exchange = exchange;
             _configuration.QueueName = queue;
             _configuration.RoutingKey = queue;
             _configuration.EnableDeadLettering = true;
+        }
+
+        public void Consume<TPayload>(string exchange, string queue, Func<TPayload, ConsumerResponse> consumerMethod)
+        {
+            SetConsumerConfig(exchange, queue);
             base.Consume<TPayload>(consumerMethod);
         }
+
+        public override SimpleQueueMessage<TPayload> GetNextMessage<TPayload>(bool acknowledge)
+        {
+            
+            return base.GetNextMessage<TPayload>(acknowledge);
+        }
+
+
     }
 }

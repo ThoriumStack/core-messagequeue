@@ -42,6 +42,15 @@ namespace MyBucks.Core.MessageQueue.Subscribe
             
         }
 
+        public IWorkQueueConsumer GetRawConsumer(string exchange, string queue)
+        {
+            var consumerInstance = new RabbitMqWorkQueueConsumer();
+            consumerInstance.SetConsumerConfig(exchange, queue);
+            return consumerInstance;
+        }
+
+        
+
         public static void StopConsumer(Guid consumerReference)
         {
             lock (stopLock)

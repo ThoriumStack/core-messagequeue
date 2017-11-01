@@ -10,5 +10,7 @@ namespace MyBucks.Core.MessageQueue.Subscribe
         Guid ConsumerId { get; set; }
         void CloseChannel();
         void Consume<TPayload>(string exchange, string queue, Func<TPayload, ConsumerResponse> consumerMethod);
+        SimpleQueueMessage<TPayload> GetNextMessage<TPayload>(bool acknowledge);
+        void Acknowledge<TPayload>(SimpleQueueMessage<TPayload> message);
     }
 }

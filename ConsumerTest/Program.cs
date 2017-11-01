@@ -14,7 +14,9 @@ namespace ConsumerTest
             consumer.Subscribe<TestEvent>("USER_CREATED", WriteConsumer2);
             WorkQueueConsumer.GetConsumer("localhost", "guest", "guest").Consume<ReceiptMessage>("receipts", "intecon", InteconProcessor);
 
+            var consumer2 = WorkQueueConsumer.GetConsumer("localhost", "admin", "admin");
             
+
             Console.ReadKey();
         }
 
