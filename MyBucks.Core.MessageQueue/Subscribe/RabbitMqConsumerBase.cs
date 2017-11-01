@@ -19,28 +19,33 @@ namespace MyBucks.Core.MessageQueue.Subscribe
         private string QueueSetup()
         {
             var connection = RabbitMqConnector.GetConnection();
-            _channel = connection.CreateModel();
-
-            _channel.ExchangeDeclare(exchange: _configuration.Exchange, type: _configuration.ExchangeType, durable: _configuration.Durable, autoDelete: _configuration.AutoDelete);
-
-            var queueName = "";
-
-            Dictionary<string, object> queueArguments = new Dictionary<string, object>();
-            ConfigureDeadLetterQueue(queueArguments, _channel);
-
-            if (string.IsNullOrWhiteSpace(_configuration.QueueName))
+            if (_channel == null)
             {
-                queueName = _channel.QueueDeclare(durable: _configuration.Durable, exclusive: false, autoDelete: _configuration.AutoDelete, arguments: queueArguments).QueueName;
-            }
-            else
-            {
-                queueName = _channel.QueueDeclare(queue: _configuration.QueueName, durable: _configuration.Durable, exclusive: false, autoDelete: _configuration.AutoDelete, arguments: queueArguments);
-            }
+                _channel = connection.CreateModel();
 
-            _channel.QueueBind(queue: queueName,
-                              exchange: _configuration.Exchange,
-                              routingKey: _configuration.RoutingKey);
-            return queueName;
+                _channel.ExchangeDeclare(exchange: _configuration.Exchange, type: _configuration.ExchangeType, durable: _configuration.Durable, autoDelete: _configuration.AutoDelete);
+
+                var queueName = "";
+
+                Dictionary<string, object> queueArguments = new Dictionary<string, object>();
+                ConfigureDeadLetterQueue(queueArguments, _channel);
+
+                if (string.IsNullOrWhiteSpace(_configuration.QueueName))
+                {
+                    queueName = _channel.QueueDeclare(durable: _configuration.Durable, exclusive: false, autoDelete: _configuration.AutoDelete, arguments: queueArguments).QueueName;
+                }
+                else
+                {
+                    queueName = _channel.QueueDeclare(queue: _configuration.QueueName, durable: _configuration.Durable, exclusive: false, autoDelete: _configuration.AutoDelete, arguments: queueArguments);
+                }
+
+                _channel.QueueBind(queue: queueName,
+                                  exchange: _configuration.Exchange,
+                                  routingKey: _configuration.RoutingKey);
+                _configuration.QueueName = queueName;
+                return queueName;
+            }
+            return _configuration.QueueName;
         }
 
         protected void Consume<TPayload>(Func<TPayload, ConsumerResponse> action)
@@ -77,7 +82,7 @@ namespace MyBucks.Core.MessageQueue.Subscribe
 
         public virtual void Acknowledge<TPayload>(SimpleQueueMessage<TPayload> message)
         {
-            QueueSetup();
+          
             _channel.BasicAck(message.DeliveryTag, false);
         }
 
