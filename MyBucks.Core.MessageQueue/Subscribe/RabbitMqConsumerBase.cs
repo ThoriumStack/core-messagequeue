@@ -63,6 +63,10 @@ namespace MyBucks.Core.MessageQueue.Subscribe
         {
             var queueName = QueueSetup();
             BasicGetResult ea = _channel.BasicGet(queueName, !acknowledge);
+            if (ea == null)
+            {
+                return null;
+            }
             var body = ea.Body;
             var message = Encoding.UTF8.GetString(body);
             var routingKey = ea.RoutingKey;
