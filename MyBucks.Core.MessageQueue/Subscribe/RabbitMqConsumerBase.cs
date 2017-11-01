@@ -77,6 +77,7 @@ namespace MyBucks.Core.MessageQueue.Subscribe
 
         public virtual void Acknowledge<TPayload>(SimpleQueueMessage<TPayload> message)
         {
+            QueueSetup();
             _channel.BasicAck(message.DeliveryTag, false);
         }
 
