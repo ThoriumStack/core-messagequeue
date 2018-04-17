@@ -14,7 +14,7 @@ namespace MyBucks.Core.MessageQueue.Subscribe
             _configuration.AutoAcknowledge = true;
             _configuration.Exchange = "events";
             _configuration.Durable = false;
-            _configuration.AutoDelete = true;
+            _configuration.AutoDelete = false;
             _configuration.ExchangeType = "topic";
         }
 
