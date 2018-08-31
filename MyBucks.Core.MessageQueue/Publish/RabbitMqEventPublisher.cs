@@ -14,7 +14,7 @@ namespace MyBucks.Core.MessageQueue
         {
             _configuration = new QueueConfiguration();
             _configuration.Durable = false;
-            _configuration.AutoDelete = true;
+            _configuration.AutoDelete = false;
             _configuration.AutoAcknowledge = true;
             config(_configuration);
         }
