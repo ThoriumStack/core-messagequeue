@@ -9,10 +9,10 @@ namespace AtlasProducerTest
     {
         static void Main(string[] args)
         {
-            string environment = ""; // todo: read from settings
+            string environment = "DEV01AF."; // todo: read from settings
 
 
-            var qp = new WorkQueuePublisher().GetAtlasQueuePublisher(environment, "localhost", "admin", "admin");
+            var qp = new WorkQueuePublisher().GetAtlasQueuePublisher(environment, "172.21.0.19", "admin", "admin");
             var routingKey = $"{environment}54.ProcessMessage";
             qp.SetRoutingKey(routingKey);
 
@@ -32,9 +32,7 @@ namespace AtlasProducerTest
 
             };
 
-
-            //qp.PublishMessage($"{environment}.FincloudGeneric", $"{environment}.WhatsappZa", payload);
-            qp.PublishMessage($"{environment}FincloudGeneric", $"{environment}WhatsappZa", payload);
+            qp.PublishMessage($"{environment}FinCloudGeneric", $"{environment}WhatsappZa", payload);
             Console.Read();
         }
     }
