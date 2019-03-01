@@ -1,5 +1,5 @@
-﻿using MyBucks.Core.MessageQueue.Model;
-using MyBucks.Core.MessageQueue.Subscribe;
+﻿using Thorium.Core.MessageQueue.Model;
+using Thorium.Core.MessageQueue.Subscribe;
 using System;
 
 namespace ConsumerTest

@@ -1,6 +1,6 @@
-﻿using MyBucks.Core.MessageQueue;
-using MyBucks.Core.MessageQueue.Model;
-using MyBucks.Core.MessageQueue.Publish;
+﻿using Thorium.Core.MessageQueue;
+using Thorium.Core.MessageQueue.Model;
+using Thorium.Core.MessageQueue.Publish;
 using System;
 
 namespace ProducerTest
@@ -30,7 +30,7 @@ namespace ProducerTest
                 Console.Write("Order: ");
                 var orderText = Console.ReadLine();
                 var workproducer = new WorkQueuePublisher().GetPersistentQueuePublisher("localhost", "admin", "admin");
-                workproducer.PublishMessage("receipts", "intecon", new MyBucks.Core.MessageQueue.Model.WorkQueueMessage<ReceiptMessage> { Payload = new ReceiptMessage { Amount = decimal.Parse(orderText), CustomerId = "JKL-HYDE" } });
+                workproducer.PublishMessage("receipts", "intecon", new Thorium.Core.MessageQueue.Model.WorkQueueMessage<ReceiptMessage> { Payload = new ReceiptMessage { Amount = decimal.Parse(orderText), CustomerId = "JKL-HYDE" } });
             }
         }
     }

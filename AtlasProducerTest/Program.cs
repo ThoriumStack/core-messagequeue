@@ -1,6 +1,6 @@
-﻿using MyBucks.Core.MessageQueue;
-using MyBucks.Core.MessageQueue.Model;
-using MyBucks.Core.MessageQueue.Publish;
+﻿using Thorium.Core.MessageQueue;
+using Thorium.Core.MessageQueue.Model;
+using Thorium.Core.MessageQueue.Publish;
 using System;
 
 namespace AtlasProducerTest

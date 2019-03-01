@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Version>$(appveyor_build_version)</Version>
+    <Authors>Thorium Dev Team</Authors>
+    <Company>Thorium Dev Team</Company>
+    <Product>Fluent Defense</Product>
+    <PackageId>Thorium.Core.MessageQueue</PackageId>
+    <AssemblyVersion>$(appveyor_build_version)</AssemblyVersion>
+    <FileVersion>$(appveyor_build_version)</FileVersion>
+    <NeutralLanguage>en</NeutralLanguage>
+    <Description>Fluent Defensive Programming</Description>
+    <Copyright>Copyright</Copyright>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/ThoriumStack/core-messagequeue/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/ThoriumStack/core-messagequeue</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ThoriumStack/core-messagequeue</RepositoryUrl>
+    <PackageReleaseNotes>Release</PackageReleaseNotes>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Jil" Version="2.16.0" />
+    <PackageReference Include="RabbitMQ.Client" Version="5.1.0" />
+  </ItemGroup>
+
+</Project>
